@@ -1,0 +1,103 @@
+# ==========================================
+# Polyglot Matrix - Git Ignore 配置
+# ==========================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 环境变量和密钥
+.env
+.env.local
+.env.*.local
+*.key
+*_key.txt
+secrets/
+
+# API Keys（重要！）
+ANTHROPIC_API_KEY
+.anthropic_key
+
+# 生成的输出文件
+anki_audio/
+word_posters/
+*.apkg
+
+# 备份文件
+vocabulary_backup.json
+*_backup.json
+*.bak
+*.old
+
+# 临时文件
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE 和编辑器
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vs/
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 操作系统
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node.js (如果未来添加)
+node_modules/
+package-lock.json
+yarn.lock
+
+# 测试输出
+test_output/
+coverage/
+.pytest_cache/
+
+# 文档临时文件
+*.pdf
+*.docx
+~$*.doc*
+
+# 大文件（可选，根据需要调整）
+# *.mp3
+# *.wav
+# *.mp4
+
+# Windows 特定
+nul

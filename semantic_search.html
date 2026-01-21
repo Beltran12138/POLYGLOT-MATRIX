@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Semantic Vocab Search | RAG Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .search-container {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .result-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .result-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .similarity-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-bold text-white mb-4">🧠 Semantic Search</h1>
+            <p class="text-white/80 text-lg">基于 Universal Sentence Encoder 的语义检索引擎</p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-container rounded-2xl p-8 mb-8">
+            <input
+                id="semanticQuery"
+                type="text"
+                placeholder="试试看：关于悲伤的形容词 / Words about persistence / 表达喜悦的动词"
+                class="w-full px-6 py-4 bg-white/20 backdrop-blur text-white placeholder-white/60 rounded-xl border-2 border-white/30 focus:border-white/60 outline-none text-lg font-mono"
+            >
+            <button
+                onclick="semanticSearch()"
+                class="mt-4 w-full bg-white/90 hover:bg-white text-purple-600 font-bold py-4 rounded-xl transition transform hover:scale-105"
+            >
+                🔍 Semantic Search
+            </button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="hidden text-center text-white mb-4">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-white border-t-transparent"></div>
+            <p class="mt-2">正在加载 AI 模型...</p>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="grid gap-4"></div>
+    </div>
+
+    <script>
+        let model;
+        let vocabData = [];
+        let vocabEmbeddings = [];
+
+        // 加载词汇数据
+        async function loadVocabulary() {
+            const response = await fetch('vocabulary.json');
+            vocabData = await response.json();
+            console.log(`✅ 加载了 ${vocabData.length} 个词汇`);
+        }
+
+        // 加载 Universal Sentence Encoder 模型
+        async function loadModel() {
+            document.getElementById('loading').classList.remove('hidden');
+            model = await use.load();
+
+            // 预计算所有词汇的向量
+            const sentences = vocabData.map(v =>
+                `${v.word} ${v.type} ${v.def}`.toLowerCase()
+            );
+            vocabEmbeddings = await model.embed(sentences);
+
+            document.getElementById('loading').classList.add('hidden');
+            console.log('✅ AI 模型加载完成');
+        }
+
+        // 计算余弦相似度
+        function cosineSimilarity(a, b) {
+            let dotProduct = 0;
+            let normA = 0;
+            let normB = 0;
+            for (let i = 0; i < a.length; i++) {
+                dotProduct += a[i] * b[i];
+                normA += a[i] * a[i];
+                normB += b[i] * b[i];
+            }
+            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        }
+
+        // 语义搜索
+        async function semanticSearch() {
+            const query = document.getElementById('semanticQuery').value.trim();
+            if (!query) return;
+
+            // 将查询转换为向量
+            const queryEmbedding = await model.embed([query]);
+            const queryVector = await queryEmbedding.array();
+            const vocabVectors = await vocabEmbeddings.array();
+
+            // 计算相似度
+            const results = vocabData.map((vocab, idx) => ({
+                ...vocab,
+                similarity: cosineSimilarity(queryVector[0], vocabVectors[idx])
+            }));
+
+            // 排序并取 Top 20
+            results.sort((a, b) => b.similarity - a.similarity);
+            const topResults = results.slice(0, 20);
+
+            // 渲染结果
+            displayResults(topResults);
+        }
+
+        // 显示结果
+        function displayResults(results) {
+            const container = document.getElementById('results');
+            container.innerHTML = results.map(r => `
+                <div class="result-card bg-white/10 backdrop-blur rounded-xl p-6 border border-white/20">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">${r.word}</h3>
+                            <span class="text-sm text-purple-200">${r.type}</span>
+                        </div>
+                        <div class="similarity-badge px-3 py-1 rounded-full text-white text-sm font-mono">
+                            ${(r.similarity * 100).toFixed(1)}% 匹配
+                        </div>
+                    </div>
+                    <p class="text-white/90 text-lg">${r.def}</p>
+                    ${r.example ? `<p class="text-white/60 text-sm mt-2 italic">💡 ${r.example}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // 初始化
+        (async () => {
+            await loadVocabulary();
+            await loadModel();
+
+            // 添加回车搜索
+            document.getElementById('semanticQuery').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') semanticSearch();
+            });
+        })();
+    </script>
+</body>
+</html>

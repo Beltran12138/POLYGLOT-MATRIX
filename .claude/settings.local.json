@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(start python -m http.server 8000)",
+      "Bash(timeout:*)",
+      "Bash(dir:*)",
+      "Bash(start dashboard.html)",
+      "Bash(python:*)",
+      "Bash(iconv:*)",
+      "Bash(start semantic_search.html)",
+      "Bash(ls:*)",
+      "Bash(git --version)",
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
