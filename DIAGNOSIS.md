@@ -44,8 +44,8 @@
 ## 5. 修复 Pipeline
 
 ```
-步骤A · EP 切分          [ep_segment.py]  ❌ 失败(全局字母序,见 §3),ep 字段作废
-  → vocabulary_v3.json   仍存,但 ep/ep_langs 字段不可信,勿用
+步骤A · EP 切分          [ep_segment.py]  ❌ 失败(全局字母序,见 §3)
+  → 脚本与 vocabulary_v3.json 已删(ep 字段不可信)
 
 步骤B · 语言重判          [ep_relang.py]   DeepSeek·已完成
   → vocabulary_v4.json   每条附 lang_new(真实ISO) + conf
@@ -53,7 +53,7 @@
   → 全量成本 ≈ $0.49 USD,14116 条全判
 
 步骤C · 成果产出(已交付,四语)
-  → polyglot_viz.html    语言分布 + 词性分布 + 跨语言同源词(去 EP)
+  → index.html           语言分布 + 词性分布 + 跨语言同源词(Pages 入口)
   → obsidian_vault/      14116 note,按语言组织,同源词互链(去 ep)
   → polyglot_deck.apkg   14116 卡,8 语言子 deck,navy 样式,无音频
 ```

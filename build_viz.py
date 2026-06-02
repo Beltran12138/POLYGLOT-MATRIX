@@ -8,7 +8,7 @@
 import json, collections, html
 
 SRC = "vocabulary_v4.json"
-OUT = "polyglot_viz.html"
+OUT = "index.html"   # Pages 入口
 
 LANG_NAME = {
     "en": "English", "es": "Español", "fr": "Français", "yue": "粵語",
