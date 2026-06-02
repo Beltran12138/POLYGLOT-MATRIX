@@ -80,7 +80,7 @@ HTML_TMPL = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Polyglot Matrix · 九语学习史</title>
+<title>Polyglot Matrix · 多语词汇语料</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <style>
   :root{--navy:#1B2A5A;--gold:#C9A24C;--ink:#1a1a1a;--paper:#fbfaf7;--line:#e3ddd0;}
@@ -107,7 +107,8 @@ HTML_TMPL = r"""<!DOCTYPE html>
 </head>
 <body>
 <header>
-  <h1>九语学习史</h1>
+  <h1>多语词汇语料</h1>
+  <div class="sub" style="color:#8a8270;font-size:13px;margin-top:4px">英 · 西 · 法 · 粤为主体 · DeepSeek 校正语言</div>
   <div class="sub" id="sub"></div>
 </header>
 
