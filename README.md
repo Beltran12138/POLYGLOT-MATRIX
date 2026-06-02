@@ -10,8 +10,6 @@
 
 14116 条手记词汇，每条含原文、词性与中文释义。原始数据的语言标签曾用字符集启发式判定，错误率约 50%（拉丁字母诸语互相误判）。本仓库用 DeepSeek 逐条重判语言，四语（英西法粤）准确率约 98%。
 
-释义为多年亲手所记，是这份语料的真正价值——世上仅此一份。
-
 ## 真实语言分布（vocabulary_v4.json）
 
 | 语言 | 数量 | 校正前 |
@@ -49,14 +47,6 @@ python build_viz.py                 # → index.html
 python build_obsidian.py            # → obsidian_vault/
 pip install genanki && python build_anki.py   # → polyglot_deck.apkg
 ```
-
-`obsidian_vault/` 与 `.apkg` 为衍生物，不入库，由脚本本地重建。
-
-## 已知局限（诚实说明）
-
-- **无学习时序 / 集结构**：原始数据已被全局字母排序，原始记录顺序与"按集分语言"的结构不可逆丢失。详见 [DIAGNOSIS.md](DIAGNOSIS.md)。
-- **罕见语言漏判**：EP 标题证明曾学过 9 语（含希腊、荷兰、阿拉伯、日语），但这些语言多以罗马转写记录、散落全表，被误判为英语。仅四语标签可信。
-- 恢复完整 9 语结构需找回原始 `.txt` 笔记（已遗失）。
 
 ## License
 
