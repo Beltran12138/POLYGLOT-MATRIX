@@ -101,3 +101,8 @@ coverage/
 
 # Windows 特定
 nul
+
+# 衍生产物(可由 build_*.py 重建,不入库避免臃肿)
+obsidian_vault/
+polyglot_deck.apkg
+anki_audio/
